@@ -1,22 +1,22 @@
+import { boot } from 'quasar/wrappers'
 import axios from 'axios'
 
-
 class API {
-	constructor() {
-		this.http = axios.create({
-			baseURL: `${process.env.API_URL}/pdt/api`,
-			withCredentials: true,
-		});
-	}
 
-	async checkCode (code) {
-		const { data } = await this.http.get('/code', { params: { code } });
-		return data;
-	}
+  constructor() {
+    this.http = axios.create({
+      baseURL: `${process.env.API_URL}/pdt/api`,
+      withCredentials: true,
+    });
+  }
+
+  async codeResolve (code) {
+    const { data } = await this.http.get('/code-resolve', { params: { code } });
+    return data;
+  }
 
 }
 
-const api = new API();
-
-
-export { api }
+export default boot(async ({ app }) => {
+  app.provide('api', new API())
+})

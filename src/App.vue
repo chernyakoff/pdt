@@ -1,21 +1,29 @@
 <template>
-	<router-view />
+  <router-view />
 </template>
 
 <script setup>
 import { inject, onMounted, onUnmounted } from 'vue';
-
+import { useSelectStore } from 'stores/select';
+const store = useSelectStore()
 
 const onScan = inject('onScan')
-/* 
 
+const options = {
+  minLength: 8,
+  prefixKeyCode: [16],
+  suffixKeyCodes: [13],
+  onScan: async (code, iQty) => {
+    await store.resolveCode(code)
+  }
+}
 onMounted(() => {
-	document.addEventListener('scan', async function (code, qty = 1) {
-		await codeStore.check(code)
-	});
-}) */
-onUnmounted(() => {
-	onScan.detachFrom(window)
+  onScan.attachTo(window, options)
 })
+
+onUnmounted(() => {
+  onScan.detachFrom(window);
+})
+
 
 </script>

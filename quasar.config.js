@@ -13,7 +13,7 @@ const { configure } = require('quasar/wrappers');
 
 
 module.exports = configure(function (/* ctx */) {
-//  console.log(process.env.DEV? 'DEV MODE': 'PROD MODE');
+  //  console.log(process.env.DEV? 'DEV MODE': 'PROD MODE');
   return {
     eslint: {
       // fix: true,
@@ -73,7 +73,8 @@ module.exports = configure(function (/* ctx */) {
       // analyze: true,
       env: {
         DEV_MODE: process.env.DEV,
-        API_URL: process.env.DEV ? 'http://idelivery-admin' : 'https://webadmin.yacurier.ru'
+        API_URL: process.env.DEV ? 'http://idelivery-admin' : 'https://webadmin.yacurier.ru',
+        PRODUCT_IMAGES_URL: process.env.DEV ? 'http://idelivery-client' : 'https://webaclient.yacurier.ru',
       },
       // rawDefine: {}
       // ignorePublicFolder: true,
@@ -113,6 +114,8 @@ module.exports = configure(function (/* ctx */) {
       // Quasar plugins
       plugins: [
         'Notify',
+        'LocalStorage',
+        'SessionStorage'
       ]
     },
 
