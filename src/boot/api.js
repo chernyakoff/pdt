@@ -15,6 +15,11 @@ class API {
     return data;
   }
 
+  async itemSearch (code) {
+    const { data } = await this.http.get('/item-search');
+    return data;
+  }
+
 }
 
 export default boot(async ({ app }) => {

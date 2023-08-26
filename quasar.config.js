@@ -74,7 +74,7 @@ module.exports = configure(function (/* ctx */) {
       env: {
         DEV_MODE: process.env.DEV,
         API_URL: process.env.DEV ? 'http://idelivery-admin' : 'https://webadmin.yacurier.ru',
-        PRODUCT_IMAGES_URL: process.env.DEV ? 'http://idelivery-client' : 'https://webaclient.yacurier.ru',
+        PRODUCT_IMAGES_URL: process.env.DEV ? 'http://idelivery-client' : 'https://webclient.yacurier.ru',
       },
       // rawDefine: {}
       // ignorePublicFolder: true,
@@ -113,9 +113,11 @@ module.exports = configure(function (/* ctx */) {
 
       // Quasar plugins
       plugins: [
+        'Meta',
         'Notify',
         'LocalStorage',
-        'SessionStorage'
+        'SessionStorage',
+        'Dialog'
       ]
     },
 
