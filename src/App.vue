@@ -3,27 +3,25 @@
 </template>
 
 <script setup>
-import { inject, onMounted, onUnmounted } from 'vue';
-import { useSelectStore } from 'stores/select';
-const store = useSelectStore()
+import { inject, onMounted, onUnmounted } from "vue";
+import { useSearchStore } from "stores/search";
 
-const onScan = inject('onScan')
+const store = useSearchStore();
+const onScan = inject("onScan");
 
 const options = {
   minLength: 8,
   prefixKeyCode: [16],
   suffixKeyCodes: [13],
-  onScan: async (code, iQty) => {
-    await store.resolveCode(code)
-  }
-}
+  onScan: async (code) => {
+    await store.resolve(code);
+  },
+};
 onMounted(() => {
-  onScan.attachTo(window, options)
-})
+  onScan.attachTo(window, options);
+});
 
 onUnmounted(() => {
   onScan.detachFrom(window);
-})
-
-
+});
 </script>

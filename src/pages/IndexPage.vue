@@ -1,6 +1,7 @@
 <template>
   <q-page class="bg-white text-gray">
-    <search-panel />
+    <simulate-panel />
+    <search-toolbar />
     <Suspense>
       <search-results />
     </Suspense>
@@ -8,6 +9,7 @@
 </template>
 
 <script setup>
-import SearchPanel from "components/search/SearchPanel.vue";
+import SearchToolbar from "components/search/SearchToolbar.vue";
 import SearchResults from "components/search/SearchResults.vue";
+import SimulatePanel from "components/tools/SimulatePanel.vue";
 </script>

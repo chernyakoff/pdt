@@ -99,10 +99,12 @@ module.exports = configure(function (/* ctx */) {
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#framework
     framework: {
-      config: {},
+      config: {
+
+      },
 
       // iconSet: 'material-icons', // Quasar icon set
-      // lang: 'en-US', // Quasar language pack
+      lang: 'ru', // Quasar language pack
 
       // For special cases outside of where the auto-import strategy can have an impact
       // (like functional components as one of the examples),
@@ -117,7 +119,7 @@ module.exports = configure(function (/* ctx */) {
         'Notify',
         'LocalStorage',
         'SessionStorage',
-        'Dialog'
+        'Dialog',
       ]
     },
 

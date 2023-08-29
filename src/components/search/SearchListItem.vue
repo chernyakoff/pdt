@@ -1,16 +1,25 @@
 <template>
   <q-item>
     <q-item-section top avatar
-      ><search-item-image :id="id" :image="image"
+      ><search-item-image :id="id" :image="image" :total="total"
     /></q-item-section>
-    <q-item-section top>
+    <q-item-section bottom>
       <q-item-label lines="2">{{ name }} </q-item-label>
-      <q-item-label caption>{{ code }}</q-item-label>
+      <q-item-label class="q-gutter-sm">
+        <span class="text-caption text-blue-grey-7">{{ code }}</span>
+        <q-badge
+          class="unselectable"
+          outline
+          color="secondary"
+          v-for="(cell, index) in cells"
+          :key="index"
+          :label="cell.name"
+        />
+      </q-item-label>
     </q-item-section>
     <q-space />
     <q-item-section top side>
       <div class="q-gutter-sm">
-        <q-badge color="teal" :label="cname" />
         <q-badge color="purple" :label="total" />
       </div>
     </q-item-section>
@@ -25,14 +34,8 @@ const props = defineProps({
   name: Number,
   code: String,
   image: String,
-  weight: Number,
-  width: Number,
-  height: Number,
-  price: Number,
   total: Number,
   stock: Object,
-  cell_name: String,
+  cells: Array,
 });
-
-const cname = props.cell_name.replace("Зона приемки", "ЗП");
 </script>

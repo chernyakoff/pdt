@@ -12,7 +12,10 @@ export const useLightboxStore = defineStore('lightbox', () => {
   const getImage = (id) => images.value[idToIndex.value[id]]
 
   const addImage = (id, image) => {
-    if (image !== '') {
+    if (image) {
+      if (!image.startsWith('/')) {
+        image = `/${image}`
+      }
       images.value.push(`${process.env.PRODUCT_IMAGES_URL}${image}`)
       idToIndex.value[id] = images.value.length - 1
     }

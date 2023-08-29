@@ -1,4 +1,4 @@
-import { useSettingsStore } from "./settings"
+import { useSettingsStore } from "../../src/stores/settings"
 
 class Record {
   props = {

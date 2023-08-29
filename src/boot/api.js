@@ -10,13 +10,18 @@ class API {
     });
   }
 
-  async codeResolve (code) {
-    const { data } = await this.http.get('/code-resolve', { params: { code } });
+  async resolve (code) {
+    const { data } = await this.http.get('/resolve', { params: { code } });
     return data;
   }
 
-  async itemSearch (code) {
-    const { data } = await this.http.get('/item-search');
+  async search () {
+    const { data } = await this.http.get('/search');
+    return data;
+  }
+
+  async select (params) {
+    const { data } = await this.http.get('/select', { params });
     return data;
   }
 

@@ -20,8 +20,7 @@ input[type="number"] {
 body {
   background: #0e0e0e;
 }
-.cart-component,
-.cell-component {
-  margin: 10px 0;
-  padding-bottom: 20px !important;
+
+.unselectable {
+  user-select: none;
 }

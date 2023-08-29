@@ -24,11 +24,16 @@ export const useSelectStore = defineStore('select',
 
     const step = ref(0)
 
+
+
     const resolveCode = async (code) => {
+
       const response = await api.codeResolve(code);
       if (!response) return
       if (response.type === 'product') {
+
         const _cart = carts.value.find(item => item.active == true);
+
         if (typeof _cart !== 'undefined') {
           _cart.add(response.data)
           _cart.expanded = true
