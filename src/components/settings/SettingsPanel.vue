@@ -7,12 +7,13 @@
       <div class="col-1">
       </div>
       <q-select
+        v-show="stocks.list.length > 0"
         class="col-10"
         hint="Выберите склад с которым будете работать"
         square
         dense
         v-model="settings.stock"
-        :options="settings.stocks"
+        :options="stocks.list"
         emit-value
         map-options
         options-dense
@@ -31,9 +32,14 @@
 </template>
 <script setup>
 
+import { useStocksStore } from "stores/stocks";
 import { useSettingsStore } from "stores/settings";
 
 const settings = useSettingsStore();
+const stocks = useStocksStore();
+if (!stocks.list.length) {
+  await stocks.load()
+}
 
 
 

@@ -57,6 +57,7 @@ export const useSearchStore = defineStore('search',
 
 
     const search = async () => {
+
       rawItems.value = await api.search(settings.stock)
       orderIds.value = [...new Set(rawItems.value.map(item => item.order_id))];
       notLoaded.value = false

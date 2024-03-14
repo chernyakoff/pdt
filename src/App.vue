@@ -7,7 +7,10 @@
 import { inject, onMounted, onUnmounted } from "vue";
 import { useSearchStore } from "stores/search";
 
+
 const store = useSearchStore();
+
+
 const onScan = inject("onScan");
 
 const options = {

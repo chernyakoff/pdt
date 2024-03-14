@@ -68,22 +68,30 @@
 <script setup>
 import { ref } from "vue";
 import { useRoute } from "vue-router";
-import { useSettingsStore } from "stores/settings";
-import { useLightboxStore } from "stores/lightbox";
 import { useMeta } from "quasar";
-const settings = useSettingsStore();
+import { useLightboxStore } from "stores/lightbox";
+import { useStocksStore } from "stores/stocks";
+import { useSettingsStore } from "stores/settings";
+
 const lightbox = useLightboxStore();
+const stocks = useStocksStore();
+const settings = useSettingsStore();
+
 const route = useRoute();
 useMeta({
   title: route.meta.title,
 });
 
 
-await settings.init()
-
 if (!settings.stock) {
-  settings.stock = settings.stocks[0].value
+
+  await stocks.load()
+  if (stocks.list.length > 0) {
+    console.log('first stock in list loaded')
+    settings.stock = stocks.list[0].value
+  }
 }
+
 
 const leftDrawerOpen = ref(false);
 
