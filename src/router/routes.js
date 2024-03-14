@@ -5,6 +5,7 @@ const routes = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { name: 'home', path: '', component: () => import('pages/IndexPage.vue'), meta: { title: 'ТСД' } },
+      { name: 'settings', path: 'settings', component: () => import('pages/SettingsPage.vue'), meta: { title: 'Настройки' } },
     ]
   },
 

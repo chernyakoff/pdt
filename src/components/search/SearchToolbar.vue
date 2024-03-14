@@ -8,8 +8,7 @@
       placeholder="Поиск"
       @focus="focus = true"
       @blur="focus = false"
-      tabindex="0"
-    >
+      tabindex="0">
       <template v-slot:prepend>
         <q-icon name="search" />
       </template>
@@ -18,11 +17,9 @@
           name="cancel"
           v-if="store.query && focus"
           @click.stop.prevent="store.query = ''"
-          class="cursor-pointer"
-        ></q-icon>
+          class="cursor-pointer"></q-icon>
       </template>
     </q-input>
-
     <q-select
       class="col-3"
       square
@@ -31,17 +28,14 @@
       :options="store.orderIds"
       options-dense
       label="Продажа"
-      tabindex="1"
-    >
+      tabindex="1">
       <template v-if="store.order" v-slot:append>
         <q-icon
           name="cancel"
           @click.stop.prevent="store.order = null"
-          class="cursor-pointer"
-        />
+          class="cursor-pointer" />
       </template>
     </q-select>
-
     <!-- <div class="col-1 row no-wrap">
       <q-btn
         icon="event"

@@ -1,7 +1,8 @@
 <template>
-  <router-view />
+  <suspense>
+    <router-view />
+  </suspense>
 </template>
-
 <script setup>
 import { inject, onMounted, onUnmounted } from "vue";
 import { useSearchStore } from "stores/search";

@@ -17,9 +17,7 @@
             label="Ячейка"
             tabindex="0"
             autofocus
-            :readonly="store.product.options.length < 2"
-          />
-
+            :readonly="store.product.options.length < 2" />
           <q-input
             label="Количество"
             square
@@ -29,17 +27,15 @@
             lazy-rules
             :hint="`нужно ${store.product.total} шт.`"
             :rules="[
-              (val) => (val && val.length > 0) || 'укажите количество',
+              (val) => (val && val > 0) || 'укажите количество',
               (val) =>
                 val <= store.product.total ||
                 'количество не может быть больше чем нужно в продаже',
               (val) =>
                 val <= store.cell.total ||
                 'количество не может быть больше чем есть в ячейке',
-            ]"
-          />
+            ]" />
         </q-card-section>
-
         <q-card-actions class="text-primary float-right">
           <q-btn flat label="Отмена" type="reset" v-close-popup />
           <q-btn label="Подбор" tabindex="0" color="primary" type="submit" />

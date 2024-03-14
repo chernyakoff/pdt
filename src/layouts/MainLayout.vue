@@ -3,10 +3,8 @@
     <q-layout class="app-layout" view="lhr lpr lfr">
       <q-header elevated>
         <q-toolbar>
-          <q-btn round :href="settings.apiUrl">
-            <q-avatar size="36px">
-              <img src="/assets/pdt/icons/favicon-96x96.png" />
-            </q-avatar>
+          <q-btn flat href="/">
+            <div class="logo"></div>
           </q-btn>
           <q-toolbar-title>
             <div class="q-pl-10">{{ $route.meta.title }}</div>
@@ -17,12 +15,19 @@
             round
             icon="menu"
             aria-label="Menu"
-            @click="toggleLeftDrawer"
-          />
+            @click="toggleLeftDrawer" />
         </q-toolbar>
       </q-header>
       <q-drawer v-model="leftDrawerOpen" show-if-above bordered>
         <q-list>
+          <q-item clickable exact :to="{ name: 'home' }">
+            <q-item-section avatar>
+              <q-icon name="home" />
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>ТСД</q-item-label>
+            </q-item-section>
+          </q-item>
           <q-item clickable tag="a" href="/stock/cell/move">
             <q-item-section avatar>
               <q-icon name="swap_horiz" />
@@ -39,6 +44,14 @@
               <q-item-label>Содержимое склада</q-item-label>
             </q-item-section>
           </q-item>
+          <q-item clickable exact :to="{ name: 'settings' }">
+            <q-item-section avatar>
+              <q-icon name="settings" />
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>Настройки</q-item-label>
+            </q-item-section>
+          </q-item>
         </q-list>
       </q-drawer>
       <q-page-container>
@@ -50,10 +63,8 @@
     :visible="lightbox.visible"
     :imgs="lightbox.images"
     :index="lightbox.index"
-    @hide="lightbox.onHide()"
-  />
+    @hide="lightbox.onHide()" />
 </template>
-
 <script setup>
 import { ref } from "vue";
 import { useRoute } from "vue-router";
@@ -66,6 +77,13 @@ const route = useRoute();
 useMeta({
   title: route.meta.title,
 });
+
+
+await settings.init()
+
+if (!settings.stock) {
+  settings.stock = settings.stocks[0].value
+}
 
 const leftDrawerOpen = ref(false);
 

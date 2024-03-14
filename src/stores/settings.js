@@ -1,15 +1,30 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { ref, inject, computed } from 'vue'
 import { LocalStorage } from 'quasar'
 
 export const useSettingsStore = defineStore('settings', () => {
-  const manualMode = ref(false);
-  const confirm = ref(false);
-  const apiUrl = process.env.API_URL;
 
+  const api = inject("api");
+  const stocks = ref([]);
+
+  const notLoaded = ref(true);
+
+  const stock = computed({
+    get () {
+      return LocalStorage.getItem('stock')
+    },
+    set (v) {
+      LocalStorage.set('stock', v)
+    },
+  })
+
+  const init = async () => {
+    stocks.value = await api.stocks()
+    notLoaded.value = false
+  }
 
   return {
-    manualMode, apiUrl, confirm
+    stocks, stock, notLoaded, init
   }
 
 })

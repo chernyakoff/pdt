@@ -20,7 +20,10 @@ input[type="number"] {
 body {
   background: #0e0e0e;
 }
-
+.logo {
+  min-width: 36px;
+  min-height: 36px;
+}
 .unselectable {
   user-select: none;
 }

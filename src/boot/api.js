@@ -5,7 +5,8 @@ class API {
 
   constructor() {
     this.http = axios.create({
-      baseURL: `${process.env.API_URL}/pdt/api`,
+      //baseURL: `${process.env.API_URL}/pdt/api`,
+      baseURL: '/pdt/api',
       withCredentials: true,
     });
   }
@@ -15,8 +16,13 @@ class API {
     return data;
   }
 
-  async search () {
-    const { data } = await this.http.get('/search');
+  async stocks (code) {
+    const { data } = await this.http.get('/stocks');
+    return data;
+  }
+
+  async search (stock) {
+    const { data } = await this.http.get('/search', { params: { stock } });
     return data;
   }
 
@@ -24,6 +30,8 @@ class API {
     const { data } = await this.http.get('/select', { params });
     return data;
   }
+
+
 
 }
 

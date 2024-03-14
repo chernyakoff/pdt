@@ -4,9 +4,14 @@
       <q-item-section>
         <q-input
           v-model="code"
-          placeholder="Введите код товара"
-          @keyup.enter="simulate(code)"
-        />
+          placeholder="Введите код товара" />
+      </q-item-section>
+      <q-item-section side>
+        <q-btn
+          flat
+          dense
+          icon="shopping_bag"
+          @click="simulate(code)" />
       </q-item-section>
     </q-item>
   </q-list>

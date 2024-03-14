@@ -13,7 +13,7 @@ const { configure } = require('quasar/wrappers');
 
 
 module.exports = configure(function (/* ctx */) {
-  //  console.log(process.env.DEV? 'DEV MODE': 'PROD MODE');
+
   return {
     eslint: {
       // fix: true,
@@ -72,15 +72,14 @@ module.exports = configure(function (/* ctx */) {
       publicPath: '/assets/pdt',
       // analyze: true,
       env: {
-        DEV_MODE: process.env.DEV,
-        API_URL: process.env.DEV ? 'http://idelivery-admin' : 'https://webadmin.yacurier.ru',
-        PRODUCT_IMAGES_URL: process.env.DEV ? 'http://idelivery-client' : 'https://webclient.yacurier.ru',
+        API_URL: process.env.API_URL,// ? 'http://idelivery-admin' : 'https://webadmin.yacurier.ru',
+        PRODUCT_IMAGES_URL: process.env.IMG_URL,// ? 'http://idelivery-client' : 'https://webclient.yacurier.ru',
       },
       // rawDefine: {}
       // ignorePublicFolder: true,
       // minify: false,
       // polyfillModulePreload: true,
-      distDir: process.env.DEV ? '/home/mike/Work/Php/idelivery/admin/modules/pdt/spa' : './dist/spa',
+      distDir: process.env.DIST_DIR,// ? '/home/mike/Work/Php/idelivery/admin/modules/pdt/spa' : './dist/spa',
 
       // extendViteConf (viteConf) {},
       // viteVuePluginOptions: {},

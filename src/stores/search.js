@@ -2,11 +2,10 @@ import { defineStore } from 'pinia'
 import {
   ref,
   inject,
-  computed,
-  reactive,
+  computed
 } from 'vue';
 import { Notify } from 'quasar'
-
+import { useSettingsStore } from "stores/settings";
 const notify = (type, message = '') => {
 
   const ntypes = {
@@ -40,7 +39,7 @@ const notify = (type, message = '') => {
 
 export const useSearchStore = defineStore('search',
   () => {
-
+    const settings = useSettingsStore()
     const api = inject("api");
     const rawItems = ref([])
     const orderIds = ref([])
@@ -51,20 +50,21 @@ export const useSearchStore = defineStore('search',
     const cell = ref(null)
     const showDialog = ref(false)
     const filterByOrder = (item) => order.value != null ? item.order_id == order.value : true
+
     const filterByQuery = (item) => query.value != "" ? `${item.name} ${item.code}`.toLowerCase().indexOf(query.value.toLowerCase()) > -1 : true
     const items = computed(() => rawItems.value.filter(item => filterByOrder(item) && filterByQuery(item)));
     const notLoaded = ref(true)
 
 
-
     const search = async () => {
-      rawItems.value = await api.search()
+      rawItems.value = await api.search(settings.stock)
       orderIds.value = [...new Set(rawItems.value.map(item => item.order_id))];
       notLoaded.value = false
     }
 
     const select = async () => {
       showDialog.value = false;
+
       const item = rawItems.value.find(o => o.id === product.value.id);
       const response = await api.select({
         cell: cell.value.value,
@@ -72,6 +72,7 @@ export const useSearchStore = defineStore('search',
         total: total.value,
         order: item.order_id
       });
+
       if (response.message != 'success') {
         notify('error', response.message)
       } else {
@@ -84,6 +85,8 @@ export const useSearchStore = defineStore('search',
     }
 
     const resolve = async (code) => {
+
+
       const response = await api.resolve(code);
       if (!response) {
         notify('notfound')
@@ -96,6 +99,14 @@ export const useSearchStore = defineStore('search',
           notify('notinlist')
           return
         }
+        if (showDialog.value === true) {
+          // пик по тому же самому продукту
+          if (response.id == product.value.id) {
+            total.value++
+            return
+          }
+        }
+        total.value = 1
         response.total = needed.total
         product.value = response
         product.value.options = product.value.cells.map(item => {
