@@ -1,0 +1,163 @@
+#!/bin/bash
+
+if [ $# -eq 0 ]
+  then
+    STATE=default
+else
+    STATE=$1
+fi
+
+
+PREFIX="cfg_section_"
+
+function debug {
+   if ! [ "x$BASH_INI_PARSER_DEBUG" == "x" ]
+   then
+      echo
+      echo --start-- $*
+      echo "${ini[*]}"
+      echo --end--
+      echo
+   fi
+}
+
+
+function cfg_unset {
+   local item fun newvar vars
+   SECTION=$1
+   OLDIFS="$IFS"
+   IFS=' '$'\n'
+   if [ -z "$SECTION" ]
+   then
+      fun="$(declare -F)"
+   else
+      fun="$(declare -F $PREFIX$SECTION)"
+      if [ -z "$fun" ]
+      then
+         echo "section $SECTION not found" 1>&2
+         return
+      fi
+   fi
+   fun="${fun//declare -f/}"
+   for f in $fun; do
+      [ "${f#$PREFIX}" == "${f}" ] && continue
+      item="$(declare -f ${f})"
+      item="${item##*\{}" # remove function definition
+      item="${item##*FUNCNAME*$PREFIX\};}" # remove clear section
+      item="${item/%\}}"  # remove function close
+      item="${item%)*}" # remove everything after parenthesis
+      item="${item});" # add close parenthesis
+      vars=""
+      while [ "$item" != "" ]
+      do
+         newvar="${item%%=*}" # get item name
+         vars="$vars $newvar" # add name to collection
+         item="${item#*;}" # remove readed line
+      done
+      for var in $vars; do
+         unset $var
+      done
+   done
+   IFS="$OLDIFS"
+}
+
+function cfg_parser {
+   shopt -p extglob &> /dev/null
+   CHANGE_EXTGLOB=$?
+   if [ $CHANGE_EXTGLOB = 1 ]
+   then
+      shopt -s extglob
+   fi
+   ini="$(<$1)"                 # read the file
+   ini=${ini//$'\r'/}           # remove linefeed i.e dos2unix
+
+   ini="${ini//[/\\[}"
+   debug "escaped ["
+   ini="${ini//]/\\]}"
+   debug "escaped ]"
+   OLDIFS="$IFS"
+   IFS=$'\n' && ini=( ${ini} )  # convert to line-array
+   debug
+   ini=( ${ini[*]/#*([[:space:]]);*/} )
+   debug "removed ; comments"
+   ini=( ${ini[*]/#*([[:space:]])\#*/} )
+   debug "removed # comments"
+   ini=( ${ini[*]/#+([[:space:]])/} ) # remove init whitespace
+   debug "removed initial whitespace"
+   ini=( ${ini[*]/%+([[:space:]])/} ) # remove ending whitespace
+   debug "removed ending whitespace"
+   ini=( ${ini[*]/%+([[:space:]])\\]/\\]} ) # remove non meaningful whitespace after sections
+   debug "removed whitespace after section name"
+   if [ $BASH_VERSINFO == 3 ]
+   then
+      ini=( ${ini[*]/+([[:space:]])=/=} ) # remove whitespace before =
+      ini=( ${ini[*]/=+([[:space:]])/=} ) # remove whitespace after =
+      ini=( ${ini[*]/+([[:space:]])=+([[:space:]])/=} ) # remove whitespace around =
+   else
+      ini=( ${ini[*]/*([[:space:]])=*([[:space:]])/=} ) # remove whitespace around =
+   fi
+   debug "removed space around ="
+   ini=( ${ini[*]/#\\[/\}$'\n'"$PREFIX"} ) # set section prefix
+   debug
+   for ((i=0; i < "${#ini[@]}"; i++))
+   do
+      line="${ini[i]}"
+      if [[ "$line" =~ $PREFIX.+ ]]
+      then
+         ini[$i]=${line// /_}
+      fi
+   done
+   debug "subsections"
+   ini=( ${ini[*]/%\\]/ \(} )   # convert text2function (1)
+   debug
+   ini=( ${ini[*]/=/=\( } )     # convert item to array
+   debug
+   ini=( ${ini[*]/%/ \)} )      # close array parenthesis
+   debug
+   ini=( ${ini[*]/%\\ \)/ \\} ) # the multiline trick
+   debug
+   ini=( ${ini[*]/%\( \)/\(\) \{} ) # convert text2function (2)
+   debug
+   ini=( ${ini[*]/%\} \)/\}} )  # remove extra parenthesis
+   ini=( ${ini[*]/%\{/\{$'\n''cfg_unset ${FUNCNAME/#'$PREFIX'}'$'\n'} )  # clean previous definition of section
+   debug
+   ini[0]=""                    # remove first element
+   debug
+   ini[${#ini[*]} + 1]='}'      # add the last brace
+   debug
+   eval "$(echo "${ini[*]}")"   # eval the result
+   EVAL_STATUS=$?
+   if [ $CHANGE_EXTGLOB = 1 ]
+   then
+      shopt -u extglob
+   fi
+   IFS="$OLDIFS"
+   return $EVAL_STATUS
+}
+
+cfg_parser config.ini;
+cfg_section_$STATE;
+
+if [ -n "$devServer" ]
+  then
+    STATE=$STATE quasar dev;
+    exit 1;
+fi
+
+STATE=$STATE quasar build;
+
+if [ -n "$sshHost" ]
+then
+    ssh $sshHost rm -R $deleteDir;
+#    ssh $sshHost rm -R $deleteDir1;
+    scp -r $distDir $sshHost:$copyDir;
+#    scp -r $distDir $sshHost:$copyDir1;
+else
+    rm -r -f $deleteDir;
+#    rm -r -f $deleteDir1;
+    cp -r $distDir $copyDir;
+#    cp -r $distDir $copyDir1;
+fi
+
+
+

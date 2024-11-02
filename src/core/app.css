@@ -1,0 +1,46 @@
+/* app global css */
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+@media only screen and (min-width: 1000px) {
+    .app-layout {
+        overflow: auto;
+        min-width: 600px;
+        max-width: 600px;
+    }
+}
+
+body {
+    background: #0e0e0e;
+}
+
+.logo {
+    min-width: 36px;
+    min-height: 36px;
+}
+
+.unselectable {
+    user-select: none;
+}
+
+.list-no-y-borders {
+    border-top: none;
+    border-bottom: none;
+}
+
+.no-bottom-border {
+    border-bottom: none !important;
+}
+
+.no-top-border {
+    border-top: none !important;
+}

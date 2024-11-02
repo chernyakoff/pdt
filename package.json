@@ -6,32 +6,41 @@
   "author": "Michael Chernyakoff <chernyakoff@gmail.com>",
   "private": true,
   "scripts": {
-    "build-dev": "DEV=1 quasar build",
-    "build": "quasar build",
+    "dev": "node build.js default",
+    "build-dev": "node build.js dev",
+    "build-prod": "node build.js prod",
     "lint": "eslint --ext .js,.vue ./",
     "format": "prettier --write \"**/*.{js,vue,css,html,md,json}\" --ignore-path .gitignore",
     "test": "echo \"No test specified\" && exit 0"
   },
   "dependencies": {
-    "@quasar/extras": "^1.0.0",
+    "@quasar/extras": "^1.16.12",
     "axios": "^0.21.1",
+    "cast-with-schema": "^1.5.0",
     "onscan.js": "^1.5.2",
     "pinia": "^2.0.11",
     "pinia-plugin-persistedstate": "^3.2.1",
-    "quasar": "^2.6.0",
+    "quasar": "^2.16.6",
+    "quasar-cli": "^0.17.26",
+    "ssh2-sftp-client": "^10.0.3",
     "vue": "^3.0.0",
+    "vue-cast-props": "^0.0.5",
     "vue-easy-lightbox": "^1.12.0",
     "vue-router": "^4.0.0",
-    "vue3-barcode-scanner": "^1.0.8"
+    "vue3-barcode-scanner": "^1.0.8",
+    "yaml": "^2.4.5"
   },
   "devDependencies": {
-    "@quasar/app-vite": "^1.0.0",
+    "@quasar/app-vite": "2.0.0-beta.15",
+    "@rollup/plugin-alias": "^5.1.0",
     "autoprefixer": "^10.4.2",
     "eslint": "^8.10.0",
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-vue": "^9.0.0",
+    "ini": "^4.1.3",
     "postcss": "^8.4.14",
-    "prettier": "^2.5.1"
+    "prettier": "^2.5.1",
+    "vite-plugin-vue-devtools": "^7.3.6"
   },
   "engines": {
     "node": "^18 || ^16 || ^14.19",
